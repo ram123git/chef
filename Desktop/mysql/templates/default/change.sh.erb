@@ -1,0 +1,3 @@
+mysql -uroot -p'<%= node['old']['pwd'] %>' <<EOFMYSQL
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('<%= node['new']['pwd'] %>');
+EOFMYSQL
