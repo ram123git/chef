@@ -133,11 +133,12 @@
 			"Description": "Choose the SubnetID to attach with the EC2 Instance",
 			"Type": "AWS::EC2::Subnet::Id"
 		},
+		
 		"SubnetID2": {
 			"Description": "Choose the SubnetID to attach with the EC2 Instance",
 			"Type": "AWS::EC2::Subnet::Id"
 		},
-
+       
 		"SecurityGroupID": {
 			"Description": "Select the Security Group for EC2 Instance",
 			"Type": "AWS::EC2::SecurityGroup::Id"
@@ -158,26 +159,34 @@
 				"InstanceType": {
 					"Ref": "EC2InstanceType"
 				},
-				"SubnetId": {
-					"Ref": "SubnetID"
-				},
-
-				"SecurityGroupIds": [{
-					"Ref": "SecurityGroupID"
-				}],
 				"ImageId": {
 					"Ref": "EC2InstanceAMI"
 				},
+
 				"KeyName": {
 					"Ref": "KeyPair"
 				},
 				"Tags": [{
 					"Key": "Name",
 					"Value": "Instance3"
-				}]
+				}],
+				
+				"NetworkInterfaces": [
+          {
+            "DeleteOnTermination": "true",
+            "Description": "Primary network interface1",
+            "DeviceIndex": 0,
+            "SubnetId": {"Ref": "SubnetID"},
+            "GroupSet": [
+              {"Ref": "SecurityGroupID"}
+            ],
+            "AssociatePublicIpAddress": "true"
+          }
+        ]
+			
 			}
-		},
-
+			},
+			
 		"Ec2Instance2": {
 			"Type": "AWS::EC2::Instance",
 			"Properties": {
@@ -187,12 +196,6 @@
 				"InstanceType": {
 					"Ref": "EC2InstanceType2"
 				},
-				"SubnetId": {
-					"Ref": "SubnetID2"
-				},
-				"SecurityGroupIds": [{
-					"Ref": "SecurityGroupID2"
-				}],
 				"ImageId": {
 					"Ref": "EC2InstanceAMI2"
 				},
@@ -202,8 +205,20 @@
 				"Tags": [{
 					"Key": "Name",
 					"Value": "Instance4"
-				}]
-			}
+				}],
+				"NetworkInterfaces": [
+          {
+            "DeleteOnTermination": "true",
+            "Description": "Primary network interface2",
+            "DeviceIndex": 0,
+            "SubnetId": {"Ref": "SubnetID2"},
+            "GroupSet": [
+              {"Ref": "SecurityGroupID2"}
+            ],
+            "AssociatePublicIpAddress": "true"
+          }
+        ]
+      }
 		},
 		"ElasticLoadBalancer": {
 			"Type": "AWS::ElasticLoadBalancing::LoadBalancer",
@@ -211,6 +226,8 @@
 				"Instances": [{
 					"Ref": "Ec2Instance"
 				}],
+                          
+      "Subnets" : [ {"Ref": "SubnetAZ1"}, {"Ref" : "SubnetAZ2"}],      
 				"Subnets": [{
 					"Ref": "SubnetID"
 				}],
@@ -218,10 +235,10 @@
 				"SecurityGroups": [{
 					"Ref": "SecurityGroupID"
 				}],
-				"LoadBalancerName": "ELB-01",
+				"LoadBalancerName": "ELB2",
 				"Tags": [{
 					"Key": "Name",
-					"Value": "ELB-02"
+					"Value": "ELB2"
 				}],
 				"Listeners": [{
 					"LoadBalancerPort": "80",
@@ -257,3 +274,4 @@
 		}
 	}
 }
+
