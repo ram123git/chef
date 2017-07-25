@@ -3,7 +3,7 @@
 	"Description": "AWS Cloud Formation template to launch an EC2 Instance and a LoadBalancer",
 	"Parameters": {
 		"AvailabilityZone": {
-			"Description": "select the Availability Zone to launch the Instance",
+	"Description": "select the Availability Zone to launch the Instance",
 			"Type": "AWS::EC2::AvailabilityZone::Name"
 		},
 		"AvailabilityZone2": {
